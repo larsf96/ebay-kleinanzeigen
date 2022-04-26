@@ -87,7 +87,7 @@ def get_items_per_url(url):
         try:
             image = re.findall('imgsrc="(.*?)"', item, re.S)[0].strip()
         except Exception as e:
-            logger.error(f'No image\n\t{item["title"]}')
+            logger.error(f'No image\n\t{name}')
             continue
         log.info("Title " + name)
         items.append(Item(name, price, torg, url, image))
@@ -117,7 +117,7 @@ def echo(update: Update, context):
 
     if chat_id not in last_items:
         # Nothing here, schedule
-        scheduler.add_job(echo, trigger='interval', args=(update, context), minutes=15, id=str(chat_id))
+        scheduler.add_job(echo, trigger='interval', args=(update, context), minutes=2, id=str(chat_id))
         log.info('Scheduled job')
         last_items[chat_id] = {'last_item': None, 'url': url}
 
