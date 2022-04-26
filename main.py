@@ -89,8 +89,6 @@ def get_items_per_url(url):
         except Exception as e:
             logger.error(f'No image\n\t{item}')
             continue
-        log.info("image: " + image)
-        log.info("URL " + url)
         log.info("Title " + name)
         items.append(Item(name, price, torg, url, image))
     return items
@@ -125,6 +123,8 @@ def echo(update: Update, context):
 
     log.info("Get items")
     items = get_items_per_url(url)
+    log.info(f"Items length {len(items)}")
+    log.info(f"Last items is {last_items}")
     for item in items:
         if chat_id in last_items and item.url == last_items[chat_id]['last_item']:
             #log.info('Breaking the loop')
