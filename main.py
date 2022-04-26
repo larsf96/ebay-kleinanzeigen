@@ -87,7 +87,7 @@ def get_items_per_url(url):
         try:
             image = re.findall('imgsrc="(.*?)"', item, re.S)[0].strip()
         except Exception as e:
-            logger.error(f'No image\n\t{item}')
+            logger.error(f'No image\n\t{item["title"]}')
             continue
         log.info("Title " + name)
         items.append(Item(name, price, torg, url, image))
