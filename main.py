@@ -58,39 +58,43 @@ def get_items_per_url(url):
     qq = requests.get(url, headers=headers)
 
     text = qq.text
-    
+
+    articlesParser = BeautifulSoup(text, 'html.parser')
+    listItems = articlesParser.find_all("li", {"class": "aditem"})
+    for listItem in listItems:
+        if 'badge-topad' not in listItem.attrs['class']:
+            log.info(listItem)
+
+    # articles = articlesParser.find_all("article", {"class": "aditem"})
+    # log.info(f"Articles length {len(articles)}")
+    # items = []
+    # for item in articles:
+    #     soup = BeautifulSoup(item, 'html.parser')
+    #     soup_result = soup.find_all("a", {"class": 'ellipsis'})
+    #     if len(soup_result) > 0:
+    #         url = soup_result[0]['href']
+    #         name = soup_result[0].text
+    #     else:
+    #         continue
+
+    #     price_line = re.findall('aditem-main--middle--price">(.*?)</p>', item, re.S)
+    #     if len(price_line) > 0:
+    #         price_line = price_line[0]
+    #     else:
+    #         price_line = "0"
+    #     torg = 'VB' in price_line
+    #     price = None
+    #     if prices := re.findall(r'\d+', price_line, re.S):
+    #         price = int(prices[0])
 
 
-    articles = re.findall('<article(.*?)</article', text, re.S)
-    log.info(f"Articles length {len(articles)}")
-    items = []
-    for item in articles:
-        soup = BeautifulSoup(item, 'html.parser')
-        soup_result = soup.find_all("a", {"class": 'ellipsis'})
-        if len(soup_result) > 0:
-            url = soup_result[0]['href']
-            name = soup_result[0].text
-        else:
-            continue
-
-        price_line = re.findall('aditem-main--middle--price">(.*?)</p>', item, re.S)
-        if len(price_line) > 0:
-            price_line = price_line[0]
-        else:
-            price_line = "0"
-        torg = 'VB' in price_line
-        price = None
-        if prices := re.findall(r'\d+', price_line, re.S):
-            price = int(prices[0])
-
-
-        try:
-            image = re.findall('imgsrc="(.*?)"', item, re.S)[0].strip()
-        except Exception as e:
-            logger.error(f'No image\n\t{name}')
-            image = ""
-        log.info("Title " + name)
-        items.append(Item(name, price, torg, url, image))
+    #     try:
+    #         image = re.findall('imgsrc="(.*?)"', item, re.S)[0].strip()
+    #     except Exception as e:
+    #         logger.error(f'No image\n\t{name}')
+    #         image = ""
+    #     log.info("Title " + name)
+    #     items.append(Item(name, price, torg, url, image))
     return items
 
 
