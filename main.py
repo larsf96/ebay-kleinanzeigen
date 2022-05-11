@@ -63,9 +63,9 @@ def get_items_per_url(url):
     listItems = articlesParser.find_all("li", {"class": "ad-listitem"})
     articles = []
     for listItem in listItems:
+        # Ignore "top" ads as they are always on top
         if 'badge-topad' not in listItem.attrs['class']:
             articles.append(listItem)
-            log.info(type(listItem).__name__)
             #log.info(listItem)
     items = []
     # articles = articlesParser.find_all("article", {"class": "aditem"})
@@ -76,28 +76,30 @@ def get_items_per_url(url):
         if len(soup_result) > 0:
             url = soup_result[0]['href']
             name = soup_result[0].text
-            log.info(url)
         else:
             continue
+        
+        price_line = item.find_all("p", {"class": "aditem-main--middle--price"})
+        #price_line = re.findall('aditem-main--middle--price">(.*?)</p>', item, re.S)
+        if len(price_line) > 0:
+            price_line = price_line[0].text
+        else:
+            price_line = "0"
+        torg = 'VB' in price_line
+        price = None
+        if prices := re.findall(r'\d+', price_line, re.S):
+            price = int(prices[0])
 
-    #     price_line = re.findall('aditem-main--middle--price">(.*?)</p>', item, re.S)
-    #     if len(price_line) > 0:
-    #         price_line = price_line[0]
-    #     else:
-    #         price_line = "0"
-    #     torg = 'VB' in price_line
-    #     price = None
-    #     if prices := re.findall(r'\d+', price_line, re.S):
-    #         price = int(prices[0])
 
-
-    #     try:
-    #         image = re.findall('imgsrc="(.*?)"', item, re.S)[0].strip()
-    #     except Exception as e:
-    #         logger.error(f'No image\n\t{name}')
-    #         image = ""
-    #     log.info("Title " + name)
-    #     items.append(Item(name, price, torg, url, image))
+        try:
+            image = item.find_all("a", {"class": 'imagebox'})
+            if len(image) > 0:
+                image = image[0].attrs["data-imagesrc"]
+        except Exception as e:
+            logger.error(f'No image\n\t{name}')
+            image = ""
+        log.info("Title " + name)
+        items.append(Item(name, price, torg, url, image))
     return items
 
 
