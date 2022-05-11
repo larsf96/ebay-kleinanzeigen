@@ -59,12 +59,11 @@ def get_items_per_url(url):
 
     text = qq.text
     log.info("Starting grab")
-    # articlesParser = BeautifulSoup(text, 'html.parser')
-    # listItems = articlesParser.find_all("li", {"class": "aditem"})
-
-    # for listItem in listItems:
-    #     if 'badge-topad' not in listItem.attrs['class']:
-    #         log.info(listItem)
+    articlesParser = BeautifulSoup(text, 'html.parser')
+    listItems = articlesParser.find_all("li", {"class": "aditem"})
+    for listItem in listItems:
+        if 'badge-topad' not in listItem.attrs['class']:
+            log.info(listItem)
     items = []
     # articles = articlesParser.find_all("article", {"class": "aditem"})
     # log.info(f"Articles length {len(articles)}")
