@@ -65,20 +65,21 @@ def get_items_per_url(url):
     for listItem in listItems:
         if 'badge-topad' not in listItem.attrs['class']:
             articles.append(listItem)
+            log.info(type(listItem).__name__)
             #log.info(listItem)
     items = []
     # articles = articlesParser.find_all("article", {"class": "aditem"})
     # log.info(f"Articles length {len(articles)}")
     # items = []
-    for item in articles:
-        soup = BeautifulSoup(item, 'html.parser')
-        soup_result = soup.find_all("a", {"class": 'ellipsis'})
-        if len(soup_result) > 0:
-            url = soup_result[0]['href']
-            name = soup_result[0].text
-            log.info(url)
-        else:
-            continue
+    # for item in articles:
+    #     soup = BeautifulSoup(item, 'html.parser')
+    #     soup_result = soup.find_all("a", {"class": 'ellipsis'})
+    #     if len(soup_result) > 0:
+    #         url = soup_result[0]['href']
+    #         name = soup_result[0].text
+    #         log.info(url)
+    #     else:
+    #         continue
 
     #     price_line = re.findall('aditem-main--middle--price">(.*?)</p>', item, re.S)
     #     if len(price_line) > 0:
