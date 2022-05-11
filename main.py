@@ -62,9 +62,10 @@ def get_items_per_url(url):
     log.info("Starting grab")
     articlesParser = BeautifulSoup(text, 'html.parser')
     listItems = articlesParser.find_all("li", {"class": "ad-listitem"})
+    articles = []
     for listItem in listItems:
-        log.info(listItem.attrs)
         if 'badge-topad' not in listItem.attrs['class']:
+            articles.append(listItem)
             log.info(listItem)
     items = []
     # articles = articlesParser.find_all("article", {"class": "aditem"})
